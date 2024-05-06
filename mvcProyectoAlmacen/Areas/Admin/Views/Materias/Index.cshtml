@@ -1,0 +1,90 @@
+﻿@model IEnumerable<mvcProyectoAlmacen.Models.Materia>
+
+<h1>Lista de Materias</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Registrar Nueva Materia</a>
+</p>
+
+<p>
+    <form asp-action="BuscarPorID" method="get">
+        <div class="input-group mb-3">
+            <input type="text" name="ci" class="form-control" placeholder="Buscar por ID" aria-label="Buscar por ID" aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit" id="button-addon2">Buscar</button>
+            </div>
+        </div>
+    </form>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Modulo</th>
+            <th>Docente</th>
+            <th>Turno</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model != null)
+        {
+            @foreach (var materia in Model)
+            {
+                <tr>
+                    <td>@materia.Id</td>
+                    <td>@materia.Nombre</td>
+                    <td>@materia.Modulo</td>
+                    <td>@materia.Docente</td>
+                    <td>@materia.Turno</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@materia.Id" class="btn btn-primary">Editar</a> |
+                        <a href="#" class="btn btn-danger delete-link" data-materia-id="@materia.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }       // Accede a las propiedades del objeto aquí
+        }
+       
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+        {
+            <li class="page-item @(ViewBag.PaginaActual == i ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", "Materias", new { pagina = i })">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
+<button id="imprimirRegistros" class="btn btn-primary">Imprimir Registros</button>
+
+@section Scripts {
+    <script>
+        // Confirmar la eliminación de una materia antes de enviar la solicitud de eliminación
+        $(document).ready(function () {
+            $('.delete-link').on('click', function (e) {
+                var materiaId = $(this).data('materia-id');
+                if (confirm('¿Está seguro(a) que desea eliminar esta materia?')) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Materias")',
+                        type: 'POST',
+                        data: { id: materiaId },
+                        success: function (result) {
+                            // Redirigir al método Index después de la eliminación
+                            window.location.href = '@Url.Action("Index", "Materias")';
+                        }
+                    });
+                }
+            });
+        });
+        document.getElementById("imprimirRegistros").addEventListener("click", function () {
+            window.print();
+        });
+    </script>
+}

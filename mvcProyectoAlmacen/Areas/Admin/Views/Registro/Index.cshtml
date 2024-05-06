@@ -1,0 +1,94 @@
+﻿@model IEnumerable<mvcProyectoAlmacen.Models.Registro>
+
+<h1>Lista de Alumnos</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Registrar Nuevo Alumno</a>
+</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="BuscarPorCI" method="get">
+                <div class="input-group mb-3">
+                    <input type="text" name="ci" class="form-control" placeholder="Buscar por CI" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-primary">Buscar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div id="tablaRegistros">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>CI</th>
+                    <th>Materia</th>
+                    <th>Fecha</th>
+                    <th>Hora de Ingreso</th>
+                    <th>Hora de Salida</th>
+                    <th>Asistencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var registro in Model)
+                {
+                    <tr>
+                        <td>@registro.Id</td>
+                        <td>@registro.NombreAlumno</td>
+                        <td>@registro.ApellidoPaterno</td>
+                        <td>@registro.ApellidoMaterno</td>
+                        <td>@registro.CI</td>
+                        <td>@registro.Materia</td>
+                        <td>@registro.Fecha</td>
+                        <td>@registro.HoraDeIngreso</td>
+                        <td>@registro.HoraDesalida</td>
+                        <td>@registro.Asistencia</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@registro.Id" class="btn btn-primary">Editar</a> |
+                            <a href="#" class="btn btn-danger delete-link" data-registro-id="@registro.Id">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button id="imprimirRegistros" class="btn btn-primary">Imprimir Registros</button>
+    </div>  
+}
+else
+{
+    <p>No se encontraron registros para el CI especificado.</p>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.delete-link').on('click', function (e) {
+                e.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+
+                var registroId = $(this).data('registro-id');
+                if (confirm('¿Está seguro(a) que desea eliminar este registro?')) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Registro")',
+                        type: 'POST',
+                        data: { id: registroId },
+                        success: function (result) {
+                            // Redirigir al método Index después de la eliminación
+                            window.location.href = '@Url.Action("Index", "Registro")';
+                        }
+                    });
+                }
+            });
+        });
+        document.getElementById("imprimirRegistros").addEventListener("click", function () {
+            window.print();
+        });
+    </script>
+}

@@ -1,0 +1,71 @@
+﻿@model mvcProyectoAlmacen.Models.Registro
+@{
+    ViewBag.Title = "Editar Registro";
+}
+
+<h1>Editar Registro</h1>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="NombreAlumno" class="control-label"></label>
+        <input asp-for="NombreAlumno" class="form-control" />
+        <span asp-validation-for="NombreAlumno" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ApellidoPaterno" class="control-label"></label>
+        <input asp-for="ApellidoPaterno" class="form-control" />
+        <span asp-validation-for="ApellidoPaterno" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ApellidoMaterno" class="control-label"></label>
+        <input asp-for="ApellidoMaterno" class="form-control" />
+        <span asp-validation-for="ApellidoMaterno" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CI" class="control-label"></label>
+        <input asp-for="CI" class="form-control" />
+        <span asp-validation-for="CI" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Materia" class="control-label"></label>
+        <select asp-for="Materia" class="form-control">
+            <option value="">Seleccione una materia</option>
+            @foreach (var materia in ViewBag.Materias)
+            {
+                <option value="@materia.Text">@materia.Text</option>
+            }
+        </select>
+        <span asp-validation-for="Materia" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Fecha" class="control-label"></label>
+        <input type="date" asp-for="Fecha" class="form-control" />
+        <span asp-validation-for="Fecha" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HoraDeIngreso" class="control-label"></label>
+        <input asp-for="HoraDeIngreso" class="form-control" />
+        <span asp-validation-for="HoraDeIngreso" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HoraDesalida" class="control-label"></label>
+        <input asp-for="HoraDesalida" class="form-control" />
+        <span asp-validation-for="HoraDesalida" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Asistencia" class="control-label"></label>
+        <select asp-for="Asistencia" class="form-control">
+            <option value="">Seleccione una opción</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Virtual">Virtual</option>
+            <option value="Semi-Presencial">Semi-Presencial</option>
+        </select>
+        <span asp-validation-for="Asistencia" class="text-danger"></span>
+    </div>
+    <div class="form-group" style="margin-top: 10px;">
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
